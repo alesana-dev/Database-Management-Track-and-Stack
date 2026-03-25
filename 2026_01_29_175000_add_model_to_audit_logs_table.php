@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        if (! Schema::hasTable('audit_logs')) {
+            return;
+        }
+
+        if (! Schema::hasColumn('audit_logs', 'model')) {
+            Schema::table('audit_logs', function (Blueprint $table) {
+                $table->string('model')->default('Member')->after('entity');
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        if (! Schema::hasTable('audit_logs')) {
+            return;
+        }
+
+        if (Schema::hasColumn('audit_logs', 'model')) {
+            Schema::table('audit_logs', function (Blueprint $table) {
+                $table->dropColumn('model');
+            });
+        }
+    }
+};
